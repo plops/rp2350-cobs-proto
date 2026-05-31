@@ -1,0 +1,39 @@
+name: Rust Firmware Build
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: thumbv8m.main-none-eabihf
+
+      - name: Install flip-link
+        run: cargo install flip-link
+
+      - name: Build Firmware
+        run: cargo build --release
+
+      - name: Setup tmate session for SSH debugging (Runs on failure or manual dispatch)
+        if: ${{ failure() || github.event_name == 'workflow_dispatch' }}
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true

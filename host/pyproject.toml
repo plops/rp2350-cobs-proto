@@ -1,0 +1,11 @@
+[project]
+name = "host-receiver"
+version = "0.1.0"
+description = "Python host receiver for RP2350 ADC protobuf data"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pyserial>=3.5",
+    "protobuf>=4.25.0",
+    "cobs>=1.2.0",
+]

@@ -1,0 +1,8 @@
+syntax = "proto3";
+package adc_monitor;
+
+message AdcReading {
+    uint32 timestamp_ms = 1;
+    uint32 adc_raw = 2;
+    float voltage = 3;
+}

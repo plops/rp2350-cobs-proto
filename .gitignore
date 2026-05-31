@@ -1,0 +1,7 @@
+target/
+.venv/
+.idea/
+.vscode/
+host/__pycache__/
+host/messages_pb2.py
+host/.venv/
