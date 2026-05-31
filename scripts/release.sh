@@ -58,7 +58,7 @@ cargo update --workspace
 
 echo "==> Committing version bump"
 git add Cargo.toml Cargo.lock
-git commit -m "Release $TAG"
+git commit --allow-empty -m "Release $TAG"
 
 echo "==> Creating tag $TAG"
 git tag "$TAG"
