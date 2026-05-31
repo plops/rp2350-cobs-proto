@@ -48,10 +48,21 @@ Read RP2350 ADC values via COBS/Protobuf over Serial
 We verified that the Rust project compiles successfully without any warnings or linker errors:
 ```bash
 $ cargo build --release
-   Compiling rp2350-adc-protobuf v0.1.0 (/home/kiel/.gemini/antigravity/scratch/rp2350-adc-protobuf)
-    Finished `release` profile [optimized + debuginfo] target(s) in 0.88s
+   Compiling rp2350-adc-protobuf v0.1.0 (/home/kiel/stage/rp2350-cobs-proto)
+    Finished `release` profile [optimized + debuginfo] target(s) in 32.18s
 ```
 The compiled output is located at: `target/thumbv8m.main-none-eabihf/release/rp2350-adc-protobuf`
+
+### 3. Release Publication on GitHub Build Server
+1.  **Repository Move**: The codebase was successfully copied to `/home/kiel/stage/rp2350-cobs-proto/`.
+2.  **Workflow Configured for Releases**: The workflow `.github/workflows/build.yml` was updated to add a write permission block and steps using `actions/upload-artifact@v4` (always publishes compilation outputs as Actions Run UI artifacts) and `softprops/action-gh-release@v2` (publishes the compiled binary to a GitHub Release on tag trigger).
+3.  **Local Release Tagging**: We ran `./scripts/release.sh 0.1.0` to automatically build the target locally, commit the version details, and create the local `v0.1.0` tag.
+4.  **GitHub Push**: We successfully pushed the main branch and release tag to the origin remote:
+    ```bash
+    git push origin main
+    git push origin v0.1.0
+    ```
+    This triggered the build server to start compilation and automatically attach the compiled binary as a release asset under the `v0.1.0` tag.
 
 ---
 
