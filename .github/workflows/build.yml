@@ -3,9 +3,14 @@ name: Rust Firmware Build
 on:
   push:
     branches: [ main, master ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -31,6 +36,20 @@ jobs:
 
       - name: Build Firmware
         run: cargo build --release
+
+      - name: Upload Build Artifact (Actions UI)
+        uses: actions/upload-artifact@v4
+        with:
+          name: rp2350-firmware
+          path: target/thumbv8m.main-none-eabihf/release/rp2350-adc-protobuf
+
+      - name: Create GitHub Release and Upload Asset
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/thumbv8m.main-none-eabihf/release/rp2350-adc-protobuf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup tmate session for SSH debugging (Runs on failure or manual dispatch)
         if: ${{ failure() || github.event_name == 'workflow_dispatch' }}
